@@ -1,19 +1,54 @@
 plugins {
-    id 'java'
+    id 'idea'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false //  нужен для указания версии плагина дочерним проектам
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
+idea {
+    project {
+        languageLevel = 17
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+allprojects {
+    group 'org.example'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.2")
+            }
+//            dependency("com.google.guava:guava:${Versions.guava}") //  'buildSrc' cannot be used as a project name as it is a reserved name
+            dependency("com.google.guava:guava:31.0.1-jre")
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict() // сборка падает в случае появления конфликта между зависимостями
+        }
+        resolutionStrategy {
+            // Явно указать какую версию зависимости взять
+            // при появлении конфликта между зависимостями
+            force("org.apiguardian:apiguardian-api:1.1.2")
+        }
+    }
 }
 
-test {
-    useJUnitPlatform()
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
+        }
+    }
 }
