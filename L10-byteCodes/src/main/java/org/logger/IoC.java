@@ -29,7 +29,7 @@ class IoC {
 
             boolean isEqualsInterface = Arrays.stream(myClass.getClass().getInterfaces()).anyMatch(aClass -> aClass.equals(method.getDeclaringClass()));
             boolean isEqualsMethod = Arrays.stream(myClass.getClass().getMethods())
-                    .filter(m -> Objects.nonNull(m.getAnnotation(Log.class)))
+                    .filter(m -> m.isAnnotationPresent(Log.class))
                     .filter(m -> m.getName().equals(method.getName()))
                     .anyMatch(m -> Arrays.equals(m.getParameterTypes(), method.getParameterTypes()));
             if (isEqualsInterface && isEqualsMethod) {
