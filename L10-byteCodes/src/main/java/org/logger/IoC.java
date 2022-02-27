@@ -13,17 +13,17 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class IoC {
 
-    private static List<Method> logMethods;
-
     static TestLogging createTestLogging(TestLogging testLoggingImpl) {
-        logMethods = Arrays.stream(testLoggingImpl.getClass().getMethods())
+        List<Method> logMethods = Arrays.stream(testLoggingImpl.getClass().getMethods())
                 .filter(m -> m.isAnnotationPresent(Log.class)).collect(Collectors.toList());
-        InvocationHandler handler = new InvocationHandlerImpl(testLoggingImpl);
-        return (TestLogging) Proxy.newProxyInstance(IoC.class.getClassLoader(),
+        InvocationHandler handler = new InvocationHandlerImpl(testLoggingImpl, logMethods);
+        TestLogging testLogging = (TestLogging) Proxy.newProxyInstance(IoC.class.getClassLoader(),
                 new Class<?>[]{TestLogging.class}, handler);
+        return testLogging;
     }
 
-    record InvocationHandlerImpl(TestLogging myClass) implements InvocationHandler {
+    record InvocationHandlerImpl(TestLogging myClass, List<Method> logMethods) implements InvocationHandler {
+
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
