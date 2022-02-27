@@ -1,5 +1,6 @@
 rootProject.name = 'java_developer_professional'
 include 'hw01-gradle'
+include 'L04-generics'
 include 'hw06-annotations'
 include 'L08-gc:demo'
 include 'L08-gc:homework'
