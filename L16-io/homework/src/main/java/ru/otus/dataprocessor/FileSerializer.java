@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileSerializer implements Serializer {

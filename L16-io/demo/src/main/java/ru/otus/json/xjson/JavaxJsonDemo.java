@@ -1,13 +1,7 @@
 package ru.otus.json.xjson;
 
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonStructure;
-import javax.json.JsonValue;
+import javax.json.*;
 import java.util.Map;
 
 public class JavaxJsonDemo {

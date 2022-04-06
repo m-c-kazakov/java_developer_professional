@@ -1,17 +1,14 @@
 package ru.otus.dataprocessor;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import ru.otus.model.Measurement;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
