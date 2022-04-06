@@ -5,10 +5,9 @@ import lombok.*;
 @Getter
 @ToString
 @Builder(toBuilder = true)
-@RequiredArgsConstructor
 @EqualsAndHashCode(of = "id" )
 public class Message {
-    private final long id;
+    private final Long id;
     private final String field1;
     private final String field2;
     private final String field3;
@@ -23,5 +22,7 @@ public class Message {
     private final String field12;
     private final ObjectForMessage field13;
 
-    //todo: 1. Добавить поля field11 - field13 (для field13 используйте класс ObjectForMessage)
+    public ObjectForMessage getField13() {
+        return new ObjectForMessage(field13.getData());
+    }
 }
