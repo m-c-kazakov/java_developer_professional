@@ -1,13 +1,23 @@
 package ru.otus.jdbc.mapper;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
+
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
+
+    Class<T> aClass;
+
     @Override
     public String getName() {
-        return null;
+        return aClass.getSimpleName();
     }
 
     @Override
