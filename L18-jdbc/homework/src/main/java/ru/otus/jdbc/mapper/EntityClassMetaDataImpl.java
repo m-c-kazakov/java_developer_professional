@@ -2,6 +2,7 @@ package ru.otus.jdbc.mapper;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Constructor;
@@ -21,8 +22,9 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     }
 
     @Override
+    @SneakyThrows
     public Constructor<T> getConstructor() {
-        return null;
+        return aClass.getConstructor();
     }
 
     @Override

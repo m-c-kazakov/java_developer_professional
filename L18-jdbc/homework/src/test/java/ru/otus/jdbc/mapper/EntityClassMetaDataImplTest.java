@@ -1,5 +1,6 @@
 package ru.otus.jdbc.mapper;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.otus.crm.model.Client;
@@ -21,7 +22,9 @@ class EntityClassMetaDataImplTest {
     }
 
     @Test
+    @SneakyThrows
     void getConstructor() {
+        assertEquals(Client.class.getConstructor(), objectEntityClassMetaData.getConstructor());
     }
 
     @Test
