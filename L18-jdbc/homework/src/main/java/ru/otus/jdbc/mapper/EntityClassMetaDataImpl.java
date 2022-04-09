@@ -1,12 +1,18 @@
 package ru.otus.jdbc.mapper;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import ru.otus.annotations.Id;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -16,9 +22,9 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     @Getter(lazy = true)
     List<Field> allFields = receiveAllFields();
     @Getter(lazy = true)
-    String name= receiveName();
+    String name = receiveName();
     @Getter(lazy = true)
-    Constructor<T> constructor= receiveConstructor();
+    Constructor<T> constructor = receiveConstructor();
 
     public EntityClassMetaDataImpl(@NonNull Class<T> aClass) {
         this.aClass = aClass;
@@ -40,16 +46,37 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     @Override
     public Field getIdField() {
-        return getAllFields().stream()
-                .filter(field -> field.isAnnotationPresent(Id.class))
-                .findFirst()
+        return getAllFields().stream().filter(field -> field.isAnnotationPresent(Id.class)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Не найдено поле с аннотацией id"));
     }
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return getAllFields().stream()
-                .filter(field -> !field.isAnnotationPresent(Id.class))
-                .toList();
+        return getAllFields().stream().filter(field -> !field.isAnnotationPresent(Id.class)).toList();
+    }
+
+    @Override
+    @SneakyThrows
+    public List<T> initializingAnObject(ResultSet resultSet) {
+        List<T> objects = new ArrayList<>();
+        while (resultSet.next()) {
+            T object = getConstructor().newInstance();
+            objects.add(object);
+            for (Field field : getFieldsWithoutId()) {
+                field.set(object, resultSet.getObject(field.getName()));
+            }
+        }
+        return objects;
+    }
+
+    @Override
+    public List<Object> getFieldsValue(T object) {
+        return getAllFields().stream().map(field -> {
+            try {
+                return field.get(object);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Unexpected error");
+            }
+        }).filter(Objects::nonNull).toList();
     }
 }
