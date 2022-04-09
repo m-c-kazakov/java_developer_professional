@@ -9,6 +9,7 @@ import ru.otus.annotations.Id;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,8 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     String name = receiveName();
     @Getter(lazy = true)
     Constructor<T> constructor = receiveConstructor();
+    @Getter(lazy = true)
+    List<Method> methods = receiveAllMethods();
 
     public EntityClassMetaDataImpl(@NonNull Class<T> aClass) {
         this.aClass = aClass;
@@ -42,6 +45,10 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     public List<Field> receiveAllFields() {
         return List.of(aClass.getDeclaredFields());
+    }
+
+    public List<Method> receiveAllMethods() {
+        return List.of(aClass.getMethods());
     }
 
     @Override
@@ -62,21 +69,27 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
         while (resultSet.next()) {
             T object = getConstructor().newInstance();
             objects.add(object);
-            for (Field field : getFieldsWithoutId()) {
+            for (Field field : getAllFields()) {
+                field.setAccessible(true);
                 field.set(object, resultSet.getObject(field.getName()));
             }
+
         }
         return objects;
     }
 
     @Override
     public List<Object> getFieldsValue(T object) {
-        return getAllFields().stream().map(field -> {
-            try {
-                return field.get(object);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Unexpected error");
-            }
-        }).filter(Objects::nonNull).toList();
+        return getAllFields().stream()
+                .map(field -> {
+                    try {
+                        field.setAccessible(true);
+                        return field.get(object);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException("Unexpected error");
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
     }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,12 +24,26 @@ public class EntitySQLMetaDataImpl<T> implements EntitySQLMetaData<T> {
     }
 
     @Override
-    public String getInsertSql() {
+    public String getInsertSql(T object) {
         return "INSERT INTO %s(%s) VALUES(%s)".formatted(
                 entityClassMetaData.getName(),
-                entityClassMetaData.getFieldsWithoutId().stream().map(Field::getName)
+                entityClassMetaData.getFieldsWithoutId().stream().filter(field -> {
+                            field.setAccessible(true);
+                            try {
+                                return Objects.nonNull(field.get(object));
+                            } catch (IllegalAccessException ignored) {
+                                return false;
+                            }
+                        }).map(Field::getName)
                         .collect(Collectors.joining(",")),
-                entityClassMetaData.getFieldsWithoutId().stream().map(field -> "?")
+                entityClassMetaData.getFieldsWithoutId().stream().filter(field -> {
+                            field.setAccessible(true);
+                            try {
+                                return Objects.nonNull(field.get(object));
+                            } catch (IllegalAccessException ignored) {
+                                return false;
+                            }
+                        }).map(field -> "?")
                         .collect(Collectors.joining(",")));
     }
 

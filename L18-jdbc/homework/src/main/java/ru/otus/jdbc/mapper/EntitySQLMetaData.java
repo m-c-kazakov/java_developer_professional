@@ -8,7 +8,7 @@ public interface EntitySQLMetaData<T> {
 
     String getSelectByIdSql();
 
-    String getInsertSql();
+    String getInsertSql(T object);
 
     String getUpdateSql();
 }

@@ -42,7 +42,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     public long insert(Connection connection, T object) {
         return dbExecutor.executeStatement(
                 connection,
-                sqlQuery.getInsertSql(),
+                sqlQuery.getInsertSql(object),
                 classMetaData.getFieldsValue(object));
     }
 

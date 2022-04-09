@@ -38,8 +38,9 @@ class EntitySQLMetaDataImplTest {
 
     @Test
     void getInsertSql() {
-        assertEquals("INSERT INTO Client(name) VALUES(?)", entitySQLMetaDataClient.getInsertSql());
-        assertEquals("INSERT INTO Manager(label,param1) VALUES(?,?)", entitySQLMetaDataManager.getInsertSql());
+        assertEquals("INSERT INTO Client(name) VALUES(?)", entitySQLMetaDataClient.getInsertSql(new Client("NAME")));
+        assertEquals("INSERT INTO Manager(label) VALUES(?)", entitySQLMetaDataManager.getInsertSql(new Manager(null, "Manager", null)));
+        assertEquals("INSERT INTO Manager(label,param1) VALUES(?,?)", entitySQLMetaDataManager.getInsertSql(new Manager(null, "Manager", "PARAM2")));
 
     }
 
