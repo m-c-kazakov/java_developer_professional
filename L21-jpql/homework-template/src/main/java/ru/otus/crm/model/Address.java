@@ -1,8 +1,18 @@
 package ru.otus.crm.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+
+@Getter
+@Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "address")
 public class Address implements Cloneable {
     @Id
@@ -12,27 +22,8 @@ public class Address implements Cloneable {
     @Column(name = "street_name")
     private String street;
 
-    public Address() {
-    }
-
-    public Address(Long id, String street) {
-        this.id = id;
-        this.street = street;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
+    public Address(Address address) {
+        this.id = address.getId();
+        this.street = address.getStreet();
     }
 }
