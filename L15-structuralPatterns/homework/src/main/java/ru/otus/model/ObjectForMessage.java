@@ -8,17 +8,13 @@ import java.util.List;
 
 @NoArgsConstructor
 public class ObjectForMessage {
-    private List<String> data;
-
-    public ObjectForMessage(List<String> data) {
-        this.data = new ArrayList<>(data);
-    }
+    private final List<String> data = new ArrayList<>();
 
     public List<String> getData() {
         return new ArrayList<>(data);
     }
 
     public void setData(List<String> data) {
-        this.data = new ArrayList<>(data);
+        this.data.addAll(data);
     }
 }

@@ -24,7 +24,7 @@ class EvenSecondErrorProcessorTest {
     }
 
     @Test
-    void process$WithThrow() {
+    void processWithThrow() {
         when(dateTimeProvider.getNowSecond()).thenReturn(2);
         EvenSecondErrorProcessor evenSecondErrorProcessor = new EvenSecondErrorProcessor(dateTimeProvider);
         assertThrows(RuntimeException.class, ()-> evenSecondErrorProcessor.process(Message.builder().build()));

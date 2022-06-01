@@ -21,8 +21,4 @@ public class Message {
     private final String field11;
     private final String field12;
     private final ObjectForMessage field13;
-
-    public ObjectForMessage getField13() {
-        return new ObjectForMessage(field13.getData());
-    }
 }
