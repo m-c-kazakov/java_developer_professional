@@ -28,12 +28,13 @@ class HistoryListenerTest {
         var message = Message.builder()
                 .id(id)
                 .field10("field10")
-                .field13(field13) //TODO: раскоментировать
+                .field13(field13)
                 .build();
 
-        //when
+        // when
         historyListener.onUpdated(message);
         message.getField13().setData(new ArrayList<>()); //меняем исходное сообщение
+        field13.getData().clear(); //меняем исходный список
         field13Data.clear(); //меняем исходный список
 
         //then
