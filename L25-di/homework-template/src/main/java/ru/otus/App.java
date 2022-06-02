@@ -34,9 +34,9 @@ public class App {
 
         // TODO Должно работать во всех вариантах ниже
         // Приложение должно работать в каждом из указанных ниже вариантов
-        GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
-        //GameProcessor gameProcessor = container.getAppComponent(GameProcessorImpl.class);
-        //GameProcessor gameProcessor = container.getAppComponent("gameProcessor");
+//        GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
+//        GameProcessor gameProcessor = container.getAppComponent(GameProcessorImpl.class);
+        GameProcessor gameProcessor = container.getAppComponent("gameProcessor");
 
         gameProcessor.startGame();
     }
