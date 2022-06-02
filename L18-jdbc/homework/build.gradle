@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    dependencies {
+        implementation project(':L18-jdbc:demo')
+
+        implementation 'ch.qos.logback:logback-classic'
+        implementation 'org.flywaydb:flyway-core'
+        implementation 'org.postgresql:postgresql'
+
+        compileOnly 'org.projectlombok:lombok:1.18.22'
+        annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+        testCompileOnly 'org.projectlombok:lombok:1.18.22'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+        // https://mvnrepository.com/artifact/org.mockito/mockito-core
+        testImplementation 'org.mockito:mockito-core:4.4.0'
+        // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+        testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
+
+    }
+}
+
+test {
+}
