@@ -35,7 +35,7 @@ public class CreateUsersServlet extends HttpServlet {
         String login = request.getParameter(PARAM_LOGIN);
         String password = request.getParameter(PARAM_PASSWORD);
 
-        userDao.save(new User(name, login, password));
+        userDao.saveOrUpdate(new User(name, login, password));
 
         Map<String, Object> paramsMap = new HashMap<>();
         List<User> users = userDao.findAll();

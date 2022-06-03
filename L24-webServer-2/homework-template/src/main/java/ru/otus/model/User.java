@@ -1,16 +1,28 @@
 package ru.otus.model;
 
-import lombok.Getter;
-import lombok.With;
+import lombok.*;
 
-@Getter
+import javax.persistence.*;
+
 @With
+@Builder(toBuilder = true)
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+@Table(name = "users")
 public class User {
 
-    private final Long id;
-    private final String name;
-    private final String login;
-    private final String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
+    private String password;
 
     public User(Long id, String name, String login, String password) {
         this.id = id;
@@ -23,7 +35,7 @@ public class User {
         this(null, name, login, password);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

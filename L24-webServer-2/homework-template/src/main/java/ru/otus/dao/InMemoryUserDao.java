@@ -27,11 +27,6 @@ public class InMemoryUserDao implements UserDao {
         return Optional.ofNullable(users.get(id));
     }
 
-    @Override
-    public Optional<User> findRandomUser() {
-        Random r = new Random();
-        return users.values().stream().skip(r.nextInt(users.size() - 1)).findFirst();
-    }
 
     @Override
     public Optional<User> findByLogin(String login) {
@@ -39,9 +34,10 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public void save(User user) {
+    public User saveOrUpdate(User user) {
         long key = incId.incrementAndGet();
         users.put(key, user.withId(key));
+        return user;
     }
 
     @Override
