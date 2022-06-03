@@ -3,10 +3,13 @@ package ru.otus.dao;
 import ru.otus.model.User;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryUserDao implements UserDao {
 
     private final Map<Long, User> users;
+
+    private final AtomicLong incId = new AtomicLong(7);
 
     public InMemoryUserDao() {
         users = new HashMap<>();
@@ -33,5 +36,16 @@ public class InMemoryUserDao implements UserDao {
     @Override
     public Optional<User> findByLogin(String login) {
         return users.values().stream().filter(v -> v.getLogin().equals(login)).findFirst();
+    }
+
+    @Override
+    public void save(User user) {
+        long key = incId.incrementAndGet();
+        users.put(key, user.withId(key));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return new ArrayList<>(users.values());
     }
 }

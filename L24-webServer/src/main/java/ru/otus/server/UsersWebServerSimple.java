@@ -10,6 +10,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.dao.UserDao;
 import ru.otus.helpers.FileSystemHelper;
 import ru.otus.services.TemplateProcessor;
+import ru.otus.servlet.CreateUsersServlet;
 import ru.otus.servlet.UsersApiServlet;
 import ru.otus.servlet.UsersServlet;
 
@@ -77,6 +78,7 @@ public class UsersWebServerSimple implements UsersWebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new CreateUsersServlet(templateProcessor, userDao)), "/users/create");
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
         return servletContextHandler;
     }

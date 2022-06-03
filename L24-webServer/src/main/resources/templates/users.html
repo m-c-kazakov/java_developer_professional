@@ -16,27 +16,44 @@
 
 <body>
 <h4>Получить пользователя по id</h4>
-<input type="text" id = "userIdTextBox" value="3" placeholder="Введите id пользователя">
+<input type="text" id="userIdTextBox" value="3" placeholder="Введите id пользователя">
 <button onclick="getUserById()">Получить</button>
-<pre id = "userDataContainer"></pre>
+<pre id="userDataContainer"></pre>
 
-<h4>Случайный пользователь</h4>
+<h4>Создать пользователя</h4>
+<form action="/users/create" method="post" name="Создать пользователя">
+    <label>
+        <input type="text" name="name" value="Й7loginцв3">
+    </label>
+    <label>
+        <input type="text" name="login" value="login">
+    </label>
+    <label>
+        <input type="password" name="password" value="password">
+    </label>
+    <input type="submit" value="Создать">
+</form>
+
+
+<h4>Все пользователи</h4>
 <table style="width: 400px">
     <thead>
-        <tr>
-            <td style="width: 50px">Id</td>
-            <td style="width: 150px">Имя</td>
-            <td style="width: 100px">Логин</td>
-            <td style="width: 100px">Пароль</td>
-        </tr>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>${randomUser.id}</td>
-            <td>${randomUser.name}</td>
-            <td>${randomUser.login}</td>
-            <td>${randomUser.password}</td>
-        </tr>
+        <#list users as user>
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.login}</td>
+                <td>${user.password}</td>
+            </tr>
+        </#list>
     </tbody>
 </table>
 </body>
