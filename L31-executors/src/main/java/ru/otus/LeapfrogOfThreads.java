@@ -37,6 +37,7 @@ public class LeapfrogOfThreads {
             log.info("ThreadName={} Number={}", Thread.currentThread().getName(), i);
             waitExecute(threadNumber);
         }
+        queue.poll();
         LeapfrogOfThreads.class.notifyAll();
     }
 
