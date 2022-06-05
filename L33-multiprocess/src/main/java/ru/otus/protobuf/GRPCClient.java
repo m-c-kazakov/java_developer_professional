@@ -1,62 +1,51 @@
 package ru.otus.protobuf;
 
-//import io.grpc.ManagedChannelBuilder;
-//import io.grpc.stub.StreamObserver;
-//import ru.otus.protobuf.generated.Empty;
-//import ru.otus.protobuf.generated.RemoteDBServiceGrpc;
-//import ru.otus.protobuf.generated.UserMessage;
-//
-//import java.util.concurrent.CountDownLatch;
+import io.grpc.ManagedChannelBuilder;
+import lombok.extern.slf4j.Slf4j;
+import ru.otus.protobuf.generated.RemoteServiceGrpc;
+import ru.otus.protobuf.generated.Request;
+import ru.otus.protobuf.service.StreamObserverImpl;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+@Slf4j
 public class GRPCClient {
 
     private static final String SERVER_HOST = "localhost";
     private static final int SERVER_PORT = 8190;
 
-    public static void main(String[] args) throws InterruptedException {
-//        var channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
-//                .usePlaintext()
-//                .build();
-//
-//        var stub = RemoteDBServiceGrpc.newBlockingStub(channel);
-//        var savedUserMsg = stub.saveUser(
-//                UserMessage.newBuilder().setFirstName("Вася").setLastName("Кириешкин").build()
-//        );
-//
-//        System.out.printf("Мы сохранили Васю: {id: %d, name: %s %s}%n",
-//                savedUserMsg.getId(), savedUserMsg.getFirstName(), savedUserMsg.getLastName());
-//
-//        var allUsersIterator = stub.findAllUsers(Empty.getDefaultInstance());
-//        System.out.println("Конградулейшенз! Мы получили юзеров! Среди них должен найтись один Вася!");
-//        allUsersIterator.forEachRemaining(um ->
-//                System.out.printf("{id: %d, name: %s %s}%n",
-//                        um.getId(), um.getFirstName(), um.getLastName())
-//        );
-//
-//        System.out.println("\n\n\nА теперь тоже самое, только асинхронно!!!\n\n");
-//        var latch = new CountDownLatch(1);
-//        var newStub = RemoteDBServiceGrpc.newStub(channel);
-//        newStub.findAllUsers(Empty.getDefaultInstance(), new StreamObserver<UserMessage>() {
-//            @Override
-//            public void onNext(UserMessage um) {
-//                System.out.printf("{id: %d, name: %s %s}%n",
-//                        um.getId(), um.getFirstName(), um.getLastName());
-//            }
-//
-//            @Override
-//            public void onError(Throwable t) {
-//                System.err.println(t);
-//            }
-//
-//            @Override
-//            public void onCompleted() {
-//                System.out.println("\n\nЯ все!");
-//                latch.countDown();
-//            }
-//        });
-//
-//        latch.await();
-//
-//        channel.shutdown();
+    public static void main(String[] args) {
+        var channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
+                .usePlaintext()
+                .build();
+
+        RemoteServiceGrpc.RemoteServiceStub remoteServiceStub = RemoteServiceGrpc.newStub(channel);
+
+
+        Request request = Request.newBuilder()
+                .setFirstNumber(1)
+                .setLastNumber(10)
+                .build();
+
+        StreamObserverImpl observer = new StreamObserverImpl();
+        remoteServiceStub.send(request, observer);
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+        AtomicReference<Long> value = new AtomicReference<>(0L);
+
+        AtomicReference<Integer> cursor = new AtomicReference<>(0);
+        Runnable runnable = () -> {
+            value.set(value.get() + observer.getLastNumber() + 1);
+            log.info("RESULT: " + value);
+            if (cursor.get() >= 50) {
+                scheduledExecutorService.shutdown();
+            }
+            cursor.set(cursor.get() + 1);
+        };
+        scheduledExecutorService.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
     }
 }
