@@ -1,8 +1,6 @@
 package ru.otus.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -10,13 +8,14 @@ import javax.annotation.Nonnull;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Table("user")
 public class User {
 
     @Id
-    private final Long id;
-    private final String name;
-    private final String login;
-    private final String password;
+    private Long id;
+    private String name;
+    private String login;
+    private String password;
 }
