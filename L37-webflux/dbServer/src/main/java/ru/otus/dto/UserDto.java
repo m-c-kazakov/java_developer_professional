@@ -3,6 +3,7 @@ package ru.otus.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@ToString
 @Getter
 @Setter
 @Builder

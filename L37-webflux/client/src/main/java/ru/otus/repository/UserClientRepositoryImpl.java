@@ -7,10 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
+//@Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserClientRepositoryImpl implements UserRepository {
 
